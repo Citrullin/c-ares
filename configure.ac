@@ -194,6 +194,7 @@ case X-"$ac_cv_native_windows" in
     CURL_CHECK_HEADER_WINSOCK
     CURL_CHECK_HEADER_WINSOCK2
     CURL_CHECK_HEADER_WS2TCPIP
+    CPPFLAGS="$CPPFLAGS -D_WIN32_WINNT=0x0600"
     ;;
   *)
     ac_cv_header_winsock_h="no"
@@ -556,8 +557,12 @@ fi
 
 
 # check for ssize_t
-AC_CHECK_TYPE(ssize_t, ,
-   AC_DEFINE(ssize_t, int, [the signed version of size_t]))
+AC_CHECK_TYPE(ssize_t, [ CARES_TYPEOF_ARES_SSIZE_T=ssize_t ],
+  [ CARES_TYPEOF_ARES_SSIZE_T=int ])
+
+AC_DEFINE_UNQUOTED([CARES_TYPEOF_ARES_SSIZE_T], ${CARES_TYPEOF_ARES_SSIZE_T},
+  [the signed version of size_t])
+
 
 # check for bool type
 AC_CHECK_TYPE([bool],[
